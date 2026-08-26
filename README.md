@@ -29,13 +29,13 @@ Python (pandas, XGBoost, scikit-learn, SHAP), PostgreSQL/SQL, Power BI, DAX
 ## Dashboard Screenshots
 
 **Page 1 — Portfolio Overview**
-![Power BI Overview](images/powerbi_page1_overview.png)
+![Power BI Overview](images/01_Portfolio_Risk_Overview.png)
 
 **Page 2 — Segmentation**
-![Power BI Segmentation](images/powerbi_page2_segmentation.png)
+![Power BI Segmentation](images/02_Risk_Segmentation.png)
 
 **Page 3 — Model Output**
-![Power BI Model Output](images/powerbi_page3_model_output.png)
+![Power BI Model Output](images/03_Model_Output.png)
 
 **SHAP Summary**
 ![SHAP Summary](images/shap_summary.png)
