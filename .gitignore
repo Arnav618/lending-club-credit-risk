@@ -216,3 +216,7 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+*.parquet
+*.pkl
+.ipynb_checkpoints/
