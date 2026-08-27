@@ -99,12 +99,12 @@ ranking, consistent with real credit risk drivers.
 Beyond relevance ranking, key risk drivers were further validated with 
 independent t-tests comparing defaulters vs. non-defaulters:
 
-| | Feature      | t-statistic | p-value | Direction                                 |
-|---|---|---|---|
-| `int_rate`   | -138.11     | < 0.001 | Defaulters have higher interest rates       |
-| `dti`        | -47.41      | < 0.001 | Defaulters have higher debt-to-income ratio |
-| `annual_inc` | 36.77       | < 0.001 | Defaulters have lower annual income         |
-| `revol_util` | -32.99      | < 0.001 | Defaulters have higher credit utilization   |
+| Feature | t-statistic | p-value | Direction |
+|---|---:|---:|---|
+| `int_rate` | -138.11 | < 0.001 | Defaulters have higher interest rates |
+| `dti` | -47.41 | < 0.001 | Defaulters have higher debt-to-income ratio |
+| `annual_inc` | 36.77 | < 0.001 | Defaulters have lower annual income |
+| `revol_util` | -32.99 | < 0.001 | Defaulters have higher credit utilization |
 
 All four t-test results are statistically significant (p < 0.001) and 
 directionally consistent with established credit risk theory.
