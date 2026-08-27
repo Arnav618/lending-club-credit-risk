@@ -67,7 +67,7 @@ lending-club-credit-risk/
 
 ## Data
 
-This project uses the [Lending Club Loan Data]((https://www.kaggle.com/datasets/adarshsng/lending-club-loan-data-csv)) dataset from Kaggle. The raw dataset is not included in this repo — download it directly from Kaggle to reproduce the analysis.
+This project uses the [Lending Club Loan Data]([https://www.kaggle.com/datasets/adarshsng/lending-club-loan-data-csv]) dataset from Kaggle. The raw dataset is not included in this repo — download it directly from Kaggle to reproduce the analysis.
 
 ## How to Run
 
