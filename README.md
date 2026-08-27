@@ -78,10 +78,10 @@ modest improvement (+0.009) consistent with expected gains from tuning, not a
 lucky split. Recall on defaults improved from 0.63 to 0.66, meaning the tuned 
 model catches more actual defaulters than the baseline.
 
-|          | AUC    | Recall (defaults) | Precision (defaults) |
-| Baseline | 0.7177 | 0.63              | 0.34                 |
-| Tuned    | 0.7265 | 0.66              | 0.33                 |
-
+| | AUC | Recall (defaults) | Precision (defaults) |
+|---|---|---|---|
+| Baseline | 0.7177 | 0.63 | 0.34 |
+| Tuned | 0.7265 | 0.66 | 0.33 |
 **Validation:** confirmed the tuned AUC is stable, not a one-off result, via 
 bootstrap resampling (1,000 iterations) — 95% CI: **[0.7127, 0.7226]**.
 
