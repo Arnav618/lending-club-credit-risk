@@ -1,8 +1,6 @@
 # Credit Risk Prediction & Portfolio Analysis — Lending Club
 
 ## Project Overview
-
-## Project Overview
 Built a credit risk pipeline on 290K Lending Club loans — catching and fixing a data leakage issue via mutual information analysis, tuning an XGBoost classifier to AUC 0.73, and validating results with bootstrap CI and t-tests. Used SHAP for model interpretability, then converted predictions into a business decision using a cost-sensitive threshold analysis (corrected with real interest-margin data), surfaced in a 3-page Power BI dashboard for portfolio risk monitoring.
 
 ## Key Findings
@@ -18,7 +16,8 @@ Python (pandas, numpy, XGBoost, scikit-learn, SHAP), Power BI, DAX
 
 ## Pipeline
 
-## 1. Data Cleaning & Preparation
+### 1. Data Cleaning & Preparation
+
 - Filtered ~2.26M raw loan records down to 1.3M resolved loans (Fully Paid / 
   Charged Off only — in-progress loans like "Current" or "Late" don't yet have 
   a known outcome and can't be used as training labels)
@@ -31,7 +30,7 @@ Python (pandas, numpy, XGBoost, scikit-learn, SHAP), Power BI, DAX
   "Other" to avoid sparse one-hot columns; one-hot encoded the final 
   categorical set (`sub_grade`, `home_ownership`, `verification_status`, `purpose`)
   
-## 2. Leakage Detection & Removal
+### 2. Leakage Detection & Removal
 
 **The problem:** a first pass at feature relevance (mutual information against 
 the target) showed one feature, `total_rec_prncp`, scoring 0.47 — more than 
@@ -60,7 +59,7 @@ The gap between 0.47 (leaked) and 0.04 (legitimate) is the clearest evidence
 the fix worked.
 
 
-## 3. Model Training & Tuning
+### 3. Model Training & Tuning
 
 **Baseline model:** trained an XGBoost classifier with default hyperparameters, 
 using `scale_pos_weight` (≈3.98) to account for the ~80/20 class imbalance — 
@@ -88,7 +87,8 @@ model catches more actual defaulters than the baseline.
 | Metric | Value |
 |---|---|
 | Bootstrap 95% CI (AUC) | [0.7127, 0.7226] |
-## 4. Statistical Validation
+
+### 4. Statistical Validation
 
 Mutual information (used earlier to catch leakage) also confirmed which 
 legitimate features carried the strongest signal post-cleaning — `int_rate` 
@@ -109,7 +109,7 @@ independent t-tests comparing defaulters vs. non-defaulters:
 All four t-test results are statistically significant (p < 0.001) and 
 directionally consistent with established credit risk theory.
 
-## 5. Model Interpretability (SHAP)
+### 5. Model Interpretability (SHAP)
 
 Beyond aggregate metrics, SHAP (SHapley Additive exPlanations) was used to 
 understand what the tuned model actually relies on for individual predictions — 
@@ -124,7 +124,7 @@ model learned genuine signal rather than noise.
 
 ![SHAP Summary](images/shap_summary.png)
 
-## 6. Cost-Sensitive Threshold Analysis
+### 6. Cost-Sensitive Threshold Analysis
 
 A model's probability output isn't a decision — someone has to choose the 
 cutoff point at which "predicted risk" becomes "reject this applicant." 
@@ -149,11 +149,12 @@ assumption. This shift illustrates how much a lending decision depends on
 getting the underlying cost assumption right, not just on model accuracy: 
 the "right" threshold changed entirely once the guess was replaced with data.
 
-| Cost Assumption    | Optimal Threshold | Missed Defaults (FN) | Wrongly Rejected (FP) |
-| 10% (placeholder)  | 0.25              | 565                  | 35,961                |
-| 27.2% (calculated) | 0.50              | 3,961                | 15,529                |
+| Cost Assumption | Optimal Threshold | Missed Defaults (FN) | Wrongly Rejected (FP) |
+|---|---:|---:|---:|
+| 10% (placeholder) | 0.25 | 565 | 35,961 |
+| 27.2% (calculated) | 0.50 | 3,961 | 15,529 |
 
-## 7. Power BI Dashboard
+## Power BI Dashboard
 
 Model predictions and the full cleaned dataset were exported and built into a 
 3-page interactive dashboard for portfolio-level risk monitoring.
@@ -182,11 +183,11 @@ segments track actual outcomes, not just abstract probability scores.
 
 ## Results
 
-| Metric                             | Baseline      | Tuned Model      |
-| AUC-ROC                            | 0.7177        | 0.7265           |
-| Bootstrap 95% CI                   | —             | [0.7127, 0.7226] |
-| Optimal threshold (cost-corrected) | 0.25(assumed) | 0.50 (real cost) |
-
+| Metric | Baseline | Tuned Model |
+|---|---:|---:|
+| AUC-ROC | 0.7177 | 0.7265 |
+| Bootstrap 95% CI | — | [0.7127, 0.7226] |
+| Optimal threshold (cost-corrected) | 0.25 (assumed) | 0.50 (real cost) |
 
 ## Data
 
