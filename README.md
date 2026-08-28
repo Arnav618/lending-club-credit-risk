@@ -17,13 +17,19 @@ Python (pandas, numpy, XGBoost, scikit-learn, SHAP), Power BI, DAX
 ## Pipeline
 
 ### 1. Data Cleaning & Preparation
-
 - Filtered ~2.26M raw loan records down to 1.3M resolved loans (Fully Paid / 
   Charged Off only — in-progress loans like "Current" or "Late" don't yet have 
   a known outcome and can't be used as training labels)
 - Stratified sample of 290K rows, preserving the original ~80/20 class balance
+- **Outlier handling**: IQR-based detection on `annual_inc`, `dti`, and 
+  `loan_amnt` (14,049 / 1,045 / 1,471 flagged respectively). `annual_inc` was 
+  capped at the 99th percentile — extreme income values add distributional 
+  noise without proportionally more risk signal. `dti` and `loan_amnt` outliers 
+  were left unmodified — for `dti` specifically, very high values are 
+  themselves a meaningful risk signal, and capping would suppress exactly the 
+  cases the model most needs to learn from
 - Dropped columns >60% missing; imputed remaining gaps with median (numeric) 
-  or explicit "Unknown" bucketing (categorical)
+  or explicit bucketing (categorical)
 - **Feature engineering**: converted `term`, `emp_length` from text to numeric; 
   derived `issue_year` and `credit_history_years` from raw date fields
 - Bucketed rare categories (e.g., `purpose` values under 1% of the data) into 
