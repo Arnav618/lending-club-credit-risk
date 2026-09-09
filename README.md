@@ -5,10 +5,11 @@ Built a credit risk pipeline on 290K Lending Club loans — catching and fixing 
 
 ## Key Findings
 
-- **Caught and fixed data leakage**: the top feature's mutual information score dropped from 0.47 to 0.04 once post-outcome columns (fields only known after a loan's fate is decided) were removed — the "before" model was learning the answer, not predicting it.
+- **Caught and fixed data leakage**: the top feature's mutual information score  dropped from 0.47 to 0.04 once post-outcome columns (fields only known after  a loan's fate is decided) were removed — the "before" model was learning the answer, not predicting it.
 - **Tuned XGBoost reached AUC 0.7265** (baseline: 0.7177), with the improvement confirmed via bootstrap confidence interval [0.7127, 0.7226].
-- **Statistically validated key risk drivers** using t-tests (p < 0.001), so the drivers reported aren't just high on a feature-importance chart — they hold up under a formal test.
-- **Cost-sensitive threshold analysis**: an initial assumption of 10% cost-per-default was replaced with the real interest-margin figure (27.2%), which shifted the optimal decision threshold from 0.25 to 0.50 — a concrete example of how a wrong cost assumption changes the actual lending decision, not just a metric.
+- **Statistically validated key risk drivers** using t-tests (p < 0.001), so  the drivers reported aren't just high on a feature-importance chart — they  hold up under a formal test.
+- **Cost-sensitive threshold analysis**: an initial 10% cost assumption for wrongly rejecting a good applicant was replaced with the real interest-margin figure (27.2%), shifting the optimal decision threshold from 0.25 to 0.50 — a concrete example of how a wrong cost assumption changes the actual lending decision, not just a metric.
+- **Quantified portfolio-level risk** using the industry-standard PD × LGD × EAD Expected Loss framework, calculating a real average Loss Given Default of 69.8% from historical repayment data — replacing a naive "100% loss on default" assumption with a defensible, calculated figure.
 
 ## Tech Stack
 
@@ -159,6 +160,37 @@ the "right" threshold changed entirely once the guess was replaced with data.
 |---|---:|---:|---:|
 | 10% (placeholder) | 0.25 | 565 | 35,961 |
 | 27.2% (calculated) | 0.50 | 3,961 | 15,529 |
+
+## Expected Loss Framework (PD × LGD × EAD)
+
+Beyond a single accept/reject threshold, loan-level risk was quantified using 
+the standard industry Expected Loss framework:
+
+**Expected Loss = PD × LGD × EAD**
+
+- **PD (Probability of Default)**: the tuned model's predicted default 
+  probability for each loan
+- **EAD (Exposure at Default)**: the outstanding principal at the time of 
+  default, calculated as `funded_amnt − total_rec_prncp` for loans that 
+  actually defaulted
+- **LGD (Loss Given Default)**: the fraction of that exposure ultimately 
+  unrecovered, calculated directly from historical data as `EAD / funded_amnt`
+
+**EAD distribution across defaulted loans** (mean ≈ $11,192):
+
+![EAD Distribution](images/ead_distribution.png)
+
+**LGD distribution across defaulted loans** — averaging **69.8%** (median 74.8%), 
+meaning roughly 70 cents of every dollar lent is ultimately unrecovered once a 
+loan defaults:
+
+![LGD Distribution](images/lgd_distribution.png)
+
+**Portfolio-level Expected Loss**: applying the model's predicted PD, the 
+calculated 69.8% average LGD, and loan amount as EAD across the full 290K-loan 
+portfolio, the model estimates a total expected loss of **$1.36 billion** — a 
+forward-looking, dollar-denominated risk estimate combining model predictions 
+with real historical recovery data, rather than an assumed loss rate.
 
 ## Power BI Dashboard
 
